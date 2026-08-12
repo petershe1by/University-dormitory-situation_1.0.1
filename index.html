@@ -25,7 +25,7 @@
       </a>
       <nav class="header-actions" aria-label="页面辅助功能">
         <button class="text-button" id="methodButton" type="button">数据说明</button>
-        <a class="text-button link-button" href="https://github.com/petershe1by/University-dormitory-situation_1.0.1/issues" target="_blank" rel="noopener noreferrer">纠错与补充</a>
+        <button class="feedback-button" id="feedbackButton" type="button">留言反馈</button>
       </nav>
     </div>
   </header>
@@ -200,6 +200,7 @@
     <div class="footer-links">
       <a href="https://github.com/petershe1by/University-dormitory-situation" target="_blank" rel="noopener noreferrer">原始项目</a>
       <a href="https://github.com/petershe1by/University-dormitory-situation_1.0.1" target="_blank" rel="noopener noreferrer">内测仓库</a>
+      <button id="footerFeedbackButton" class="footer-feedback" type="button">留言反馈</button>
     </div>
   </footer>
 
@@ -232,6 +233,57 @@
       </ul>
       <p class="method-callout">如果你发现信息过时，请在内测仓库提交 issue，并尽量附上校区、楼栋、时间和公开来源。</p>
     </div>
+  </dialog>
+
+  <dialog id="feedbackDialog" class="feedback-dialog" aria-labelledby="feedbackTitle">
+    <div class="dialog-header">
+      <div>
+        <p class="section-kicker">INTERNAL TEST FEEDBACK</p>
+        <h2 id="feedbackTitle">告诉我们哪里有问题</h2>
+      </div>
+      <button id="feedbackClose" class="dialog-close" type="button" aria-label="关闭留言反馈">×</button>
+    </div>
+    <form id="feedbackForm" class="feedback-form">
+      <p class="feedback-intro">填写后会打开 GitHub 的公开 Issue 提交页，并自动整理成一条反馈。提交前你仍可修改内容。</p>
+      <div class="feedback-grid">
+        <label class="feedback-wide">涉及学校或页面位置
+          <input id="feedbackSchool" name="school" type="text" maxlength="80" placeholder="例如：中国科学技术大学 / 手机端筛选区">
+        </label>
+        <label>问题类型 <span aria-hidden="true">*</span>
+          <select id="feedbackType" name="type" required>
+            <option value="">请选择</option>
+            <option value="信息有误">信息有误</option>
+            <option value="搜索或筛选问题">搜索或筛选问题</option>
+            <option value="页面显示问题">页面显示问题</option>
+            <option value="使用体验建议">使用体验建议</option>
+            <option value="其他问题">其他问题</option>
+          </select>
+        </label>
+        <label>使用设备
+          <select id="feedbackDevice" name="device">
+            <option value="">不确定 / 不填写</option>
+            <option value="手机">手机</option>
+            <option value="电脑">电脑</option>
+            <option value="平板">平板</option>
+          </select>
+        </label>
+        <label class="feedback-wide">问题描述 <span aria-hidden="true">*</span>
+          <textarea id="feedbackDescription" name="description" rows="5" maxlength="1500" required placeholder="请描述你看到了什么、原本期望是什么……"></textarea>
+          <span class="field-help"><span id="feedbackCount">0</span> / 1500</span>
+        </label>
+        <label class="feedback-wide">如何复现（选填）
+          <textarea id="feedbackSteps" name="steps" rows="3" maxlength="800" placeholder="例如：搜索“某大学” → 选择“2人间” → 结果为空"></textarea>
+        </label>
+        <label class="feedback-contact feedback-wide">
+          <input id="feedbackPublicCheck" type="checkbox" required>
+          <span>我知道留言将公开显示在 GitHub Issue 中，请勿填写手机号、邮箱等隐私信息。</span>
+        </label>
+      </div>
+      <div class="feedback-actions">
+        <p>提交时需要登录 GitHub；本站不会保存表单内容。</p>
+        <button class="primary-button" type="submit">前往 GitHub 提交反馈 →</button>
+      </div>
+    </form>
   </dialog>
 
   <script type="module" src="app.mjs"></script>

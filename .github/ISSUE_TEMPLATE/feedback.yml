@@ -1,0 +1,51 @@
+name: 内测留言反馈
+description: 反馈页面、搜索、筛选或学校信息中遇到的问题
+title: "[内测反馈] "
+labels:
+  - 内测反馈
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 涉及学校或页面位置
+      placeholder: 例如：中国科学技术大学 / 手机端筛选区
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题类型
+      options:
+        - 信息有误
+        - 搜索或筛选问题
+        - 页面显示问题
+        - 使用体验建议
+        - 其他问题
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 请描述你看到了什么、原本期望是什么。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 如何复现
+      placeholder: 例如：搜索某大学 → 选择2人间 → 结果为空
+  - type: dropdown
+    id: device
+    attributes:
+      label: 使用设备
+      options:
+        - 手机
+        - 电脑
+        - 平板
+        - 不确定
+  - type: checkboxes
+    id: public
+    attributes:
+      label: 公开留言确认
+      options:
+        - label: 我知道留言会公开显示，且没有填写手机号、邮箱等隐私信息。
+          required: true

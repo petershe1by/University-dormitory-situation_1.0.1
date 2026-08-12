@@ -10,6 +10,7 @@ import {
   searchIndex,
   text
 } from "./search-utils.mjs";
+import { makeFeedbackUrl } from "./feedback-utils.mjs";
 
 const PAGE_SIZE = 24;
 const state = { records: [], filtered: [], page: 1, filters: null, queryTimer: null };
@@ -148,7 +149,13 @@ function buildCard(record, index) {
   detailButton.type = "button";
   detailButton.dataset.recordIndex = String(index);
   detailButton.setAttribute("aria-label", `查看${valueOrDash(record["院校名称"])}详情`);
-  card.append(top, badges, facts, detailButton);
+  const feedbackButton = create("button", "card-feedback-button", "反馈此条");
+  feedbackButton.type = "button";
+  feedbackButton.dataset.feedbackRecordIndex = String(index);
+  feedbackButton.setAttribute("aria-label", `反馈${valueOrDash(record["院校名称"])}的信息问题`);
+  const cardActions = create("div", "card-actions");
+  cardActions.append(detailButton, feedbackButton);
+  card.append(top, badges, facts, cardActions);
   return card;
 }
 
@@ -253,6 +260,24 @@ function openDetail(record) {
   $("#detailDialog").showModal();
 }
 
+function openFeedback(prefillSchool = "") {
+  const dialog = $("#feedbackDialog");
+  if (prefillSchool) $("#feedbackSchool").value = prefillSchool;
+  dialog.showModal();
+  requestAnimationFrame(() => $("#feedbackSchool").focus());
+}
+
+function buildFeedbackUrl() {
+  return makeFeedbackUrl({
+    school: $("#feedbackSchool").value,
+    type: $("#feedbackType").value,
+    device: $("#feedbackDevice").value,
+    description: $("#feedbackDescription").value,
+    steps: $("#feedbackSteps").value,
+    pageUrl: location.href
+  });
+}
+
 function populateSummary() {
   const names = new Set(state.records.map((record) => text(record["院校名称"])).filter(Boolean));
   const regions = new Set(state.records.map((record) => text(record["省份"])).filter(Boolean));
@@ -317,10 +342,26 @@ function bindEvents() {
   $("#resultGrid").addEventListener("click", (event) => {
     const button = event.target.closest(".detail-button");
     if (button) openDetail(state.filtered[Number(button.dataset.recordIndex)]);
+    const feedbackButton = event.target.closest(".card-feedback-button");
+    if (feedbackButton) {
+      const record = state.filtered[Number(feedbackButton.dataset.feedbackRecordIndex)];
+      openFeedback(valueOrDash(record["院校名称"]));
+    }
   });
   $("#dialogClose").addEventListener("click", () => $("#detailDialog").close());
   $("#methodButton").addEventListener("click", () => $("#methodDialog").showModal());
   $("#methodClose").addEventListener("click", () => $("#methodDialog").close());
+  $("#feedbackButton").addEventListener("click", () => openFeedback());
+  $("#footerFeedbackButton").addEventListener("click", () => openFeedback());
+  $("#feedbackClose").addEventListener("click", () => $("#feedbackDialog").close());
+  $("#feedbackDescription").addEventListener("input", (event) => { $("#feedbackCount").textContent = String(event.target.value.length); });
+  $("#feedbackForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    window.open(buildFeedbackUrl(), "_blank", "noopener,noreferrer");
+    $("#feedbackDialog").close();
+  });
   $("#retryButton").addEventListener("click", loadData);
   $("#noticeClose").addEventListener("click", () => $(".notice").remove());
   document.addEventListener("keydown", (event) => {
@@ -329,7 +370,7 @@ function bindEvents() {
       controls.search.focus();
     }
   });
-  [$("#detailDialog"), $("#methodDialog")].forEach((dialog) => {
+  [$("#detailDialog"), $("#methodDialog"), $("#feedbackDialog")].forEach((dialog) => {
     dialog.addEventListener("click", (event) => {
       const rect = dialog.getBoundingClientRect();
       const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
