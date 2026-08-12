@@ -1,269 +1,239 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>全国大学宿舍查询系统</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; background:#f0f2f5; color:#1a1a2e; min-height:100vh; }
-.header { background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460); color:#fff; padding:28px 24px 20px; text-align:center; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,.15); }
-.header h1 { font-size:22px; font-weight:700; letter-spacing:1px; }
-.header p { font-size:13px; opacity:.7; margin-top:4px; }
-.container { max-width:1400px; margin:0 auto; padding:16px; }
-.filters { background:#fff; border-radius:10px; padding:18px 20px; margin-bottom:16px; box-shadow:0 1px 4px rgba(0,0,0,.06); display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-@media(min-width:768px){ .filters { grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr; } }
-.filter-group { display:flex; flex-direction:column; gap:4px; }
-.filter-group label { font-size:12px; font-weight:600; color:#666; }
-.filter-group input,.filter-group select { padding:8px 10px; border:1px solid #d9d9d9; border-radius:6px; font-size:14px; background:#fafafa; transition:all .2s; width:100%; }
-.filter-group input:focus,.filter-group select:focus { outline:none; border-color:#0f3460; box-shadow:0 0 0 3px rgba(15,52,96,.1); background:#fff; }
-.filter-group input::placeholder { color:#bbb; }
-.stats-bar { display:flex; justify-content:space-between; align-items:center; padding:0 4px 8px; font-size:14px; color:#555; }
-.stats-bar .count { font-weight:600; color:#0f3460; }
-.table-wrap { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,.06); overflow-x:auto; }
-table { width:100%; border-collapse:collapse; font-size:13px; }
-thead { background:#f7f8fa; position:sticky; top:0; z-index:10; }
-thead th { padding:11px 10px; text-align:left; font-weight:600; color:#444; white-space:nowrap; border-bottom:1px solid #e8e8e8; cursor:pointer; user-select:none; }
-thead th:hover { color:#0f3460; }
-thead th .sort-icon { margin-left:3px; opacity:.4; font-size:10px; }
-thead th.sorted .sort-icon { opacity:1; color:#0f3460; }
-tbody tr { border-bottom:1px solid #f0f0f0; transition:background .15s; cursor:pointer; }
-tbody tr:last-child { border-bottom:none; }
-tbody tr:hover { background:#f5f7ff; }
-tbody td { padding:10px; vertical-align:top; line-height:1.5; }
-.badge { display:inline-block; padding:1px 7px; border-radius:4px; font-size:11px; font-weight:600; }
-.badge-province { background:#e6f0ff; color:#0f3460; }
-.badge-on { background:#f0faf0; color:#2e7d32; }
-.badge-off { background:#fff0f0; color:#c62828; }
-.badge-partial { background:#fff8e1; color:#f57f17; }
-.badge-none { color:#999; }
-.detail-row { display:none; }
-.detail-row.visible { display:table-row; }
-.detail-cell { padding:14px 18px !important; background:#fafbfc; }
-.detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 18px; }
-@media(min-width:768px){ .detail-grid { grid-template-columns:1fr 1fr 1fr; } }
-.detail-item { display:flex; gap:4px; font-size:13px; }
-.detail-item .label { color:#888; white-space:nowrap; min-width:72px; }
-.detail-item .value { color:#222; word-break:break-word; }
-.highlight { background:#fff3cd; padding:0 2px; border-radius:2px; }
-.no-result { text-align:center; padding:48px 20px; color:#999; font-size:15px; }
-.no-result .emoji { font-size:36px; display:block; margin-bottom:10px; }
-.loading { text-align:center; padding:80px 20px; color:#888; }
-.spinner { display:inline-block; width:32px; height:32px; border:3px solid #e0e0e0; border-top-color:#0f3460; border-radius:50%; animation:spin .8s linear infinite; margin-bottom:12px; }
-@keyframes spin{to{transform:rotate(360deg)}}
-.pagination { display:flex; align-items:center; justify-content:center; gap:6px; padding:12px 0 4px; font-size:13px; user-select:none; }
-.pagination button { padding:6px 12px; border:1px solid #d9d9d9; border-radius:6px; background:#fff; cursor:pointer; font-size:13px; color:#444; transition:all .15s; }
-.pagination button:hover:not(:disabled){ background:#f0f2ff; border-color:#0f3460; color:#0f3460; }
-.pagination button:disabled { opacity:.4; cursor:default; }
-.pagination button.active { background:#0f3460; color:#fff; border-color:#0f3460; }
-.pagination .page-info { color:#888; margin:0 8px; white-space:nowrap; }
-.clear-btn { padding:8px 14px; border:1px solid #d9d9d9; border-radius:6px; background:#fff; font-size:13px; cursor:pointer; color:#555; transition:all .15s; grid-column:1/-1; }
-.clear-btn:hover { background:#f5f5f5; border-color:#bbb; }
-@media(min-width:768px){ .clear-btn { grid-column:auto; } }
-.footer { max-width:1400px; margin:0 auto; padding:20px 16px 32px; text-align:center; color:#999; font-size:13px; line-height:1.8; }
-.footer a { color:#888; text-decoration:none; }
-.footer a:hover { color:#0f3460; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#183153">
+  <meta name="description" content="检索全国高校宿舍、生活设施与校园管理信息。数据来自公开分享，仅供择校调研参考。">
+  <meta property="og:title" content="全国高校宿舍查询">
+  <meta property="og:description" content="把宿舍条件、校园生活和管理信息放在一处查询。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://raw.githubusercontent.com/petershe1by/University-dormitory-situation_1.0.1/main/assets/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/petershe1by/University-dormitory-situation_1.0.1/main/assets/og-cover.png">
+  <title>全国高校宿舍查询</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-<div class="header">
-  <h1>🏠 全国大学宿舍查询系统</h1>
-  <p>收录 3056+ 所高校 · 数据来源：全国大学生公开分享</p>
-</div>
-<div class="container">
-  <div class="filters">
-    <div class="filter-group">
-      <label>🔍 院校名称</label>
-      <input type="text" id="filterName" placeholder="输入大学名称..." autocomplete="off">
+  <a class="skip-link" href="#results">跳到查询结果</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="全国高校宿舍查询首页">
+        <span class="brand-mark" aria-hidden="true">舍</span>
+        <span>全国高校宿舍查询</span>
+      </a>
+      <nav class="header-actions" aria-label="页面辅助功能">
+        <button class="text-button" id="methodButton" type="button">数据说明</button>
+        <a class="text-button link-button" href="https://github.com/petershe1by/University-dormitory-situation_1.0.1/issues" target="_blank" rel="noopener noreferrer">纠错与补充</a>
+      </nav>
     </div>
-    <div class="filter-group">
-      <label>📍 省份</label>
-      <select id="filterProvince"><option value="">全部省份</option></select>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <p class="eyebrow">DORM ATLAS · 内测版</p>
+        <h1 id="hero-title">先看住得怎样，再决定去往哪里</h1>
+        <p class="hero-copy">集中查看高校宿舍、用水用电、校园网络、门禁和生活便利信息。信息可能因校区、楼栋与年份而不同，请在决策前向学校复核。</p>
+
+        <div class="search-shell">
+          <label for="searchInput" class="sr-only">搜索高校、城市、地址或宿舍条件</label>
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="搜索高校、城市、地址或宿舍条件……" autocomplete="off">
+          <kbd class="search-hint" aria-hidden="true">/</kbd>
+          <button id="searchClear" class="search-clear" type="button" aria-label="清空搜索" hidden>清空</button>
+        </div>
+
+        <div class="dataset-stats" aria-label="数据概览">
+          <div><strong id="recordTotal">—</strong><span>条院校记录</span></div>
+          <div><strong id="schoolTotal">—</strong><span>个不同校名</span></div>
+          <div><strong id="regionTotal">—</strong><span>个省级地区</span></div>
+          <div><strong id="fieldTotal">35</strong><span>项生活维度</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="查询条件与结果">
+      <div class="notice" role="note">
+        <span class="notice-icon" aria-hidden="true">i</span>
+        <p><strong>阅读提示：</strong>这是学生公开分享信息的整理，不是学校官方承诺；“—”表示尚无资料，而非该设施不存在。</p>
+        <button id="noticeClose" type="button" aria-label="关闭阅读提示">×</button>
+      </div>
+
+      <section class="filter-panel" aria-labelledby="filter-title">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">组合筛选</p>
+            <h2 id="filter-title">找到更适合你的宿舍</h2>
+          </div>
+          <button id="resetFilters" class="secondary-button" type="button">重置全部</button>
+        </div>
+
+        <fieldset class="feature-fieldset">
+          <legend>常用条件</legend>
+          <div id="featureChips" class="chip-list">
+            <button class="filter-chip" type="button" data-feature="public" aria-pressed="false">公办</button>
+            <button class="filter-chip" type="button" data-feature="undergrad" aria-pressed="false">本科</button>
+            <button class="filter-chip" type="button" data-feature="desk" aria-pressed="false">上床下桌</button>
+            <button class="filter-chip" type="button" data-feature="aircon" aria-pressed="false">宿舍有空调</button>
+            <button class="filter-chip" type="button" data-feature="bath" aria-pressed="false">有独立卫浴</button>
+            <button class="filter-chip" type="button" data-feature="power" aria-pressed="false">夜间不断电</button>
+            <button class="filter-chip" type="button" data-feature="hotwater" aria-pressed="false">全天热水</button>
+            <button class="filter-chip" type="button" data-feature="laundry" aria-pressed="false">有洗衣机</button>
+            <button class="filter-chip" type="button" data-feature="metro" aria-pressed="false">附近有地铁</button>
+          </div>
+        </fieldset>
+
+        <div class="filter-grid">
+          <label>省份 / 地区
+            <select id="provinceFilter"><option value="">全部地区</option></select>
+          </label>
+          <label>办学层次
+            <select id="levelFilter">
+              <option value="">不限</option>
+              <option value="本科">本科</option>
+              <option value="专科">专科</option>
+              <option value="成人">成人</option>
+            </select>
+          </label>
+          <label>宿舍人数
+            <select id="roomFilter">
+              <option value="">不限</option>
+              <option value="1">1 人间</option>
+              <option value="2">2 人间</option>
+              <option value="3">3 人间</option>
+              <option value="4">4 人间</option>
+              <option value="5">5 人间</option>
+              <option value="6">6 人间</option>
+              <option value="7">7 人间</option>
+              <option value="8">8 人间</option>
+              <option value="9+">9 人及以上</option>
+            </select>
+          </label>
+          <label>宿舍空调
+            <select id="airconFilter">
+              <option value="">不限</option>
+              <option value="yes">有 / 部分有</option>
+              <option value="no">无</option>
+              <option value="unknown">暂无资料</option>
+            </select>
+          </label>
+          <label>独立卫浴
+            <select id="bathFilter">
+              <option value="">不限</option>
+              <option value="yes">有 / 部分有</option>
+              <option value="no">无</option>
+              <option value="unknown">暂无资料</option>
+            </select>
+          </label>
+          <label>夜间供电
+            <select id="powerFilter">
+              <option value="">不限</option>
+              <option value="always">明确不断电</option>
+              <option value="conditional">分季节 / 校区 / 时段</option>
+              <option value="off">明确断电</option>
+              <option value="unknown">暂无资料</option>
+            </select>
+          </label>
+          <label>洗澡热水
+            <select id="showerFilter">
+              <option value="">不限</option>
+              <option value="all-day">全天 / 24 小时</option>
+              <option value="timed">定时 / 分时段</option>
+              <option value="mixed">不同校区情况不同</option>
+              <option value="none">无</option>
+              <option value="unknown">暂无资料</option>
+            </select>
+          </label>
+        </div>
+        <div id="activeFilters" class="active-filters" aria-live="polite"></div>
+      </section>
+
+      <section id="results" class="results-section" aria-labelledby="results-title" tabindex="-1">
+        <div class="results-toolbar">
+          <div>
+            <p class="section-kicker">查询结果</p>
+            <h2 id="results-title"><span id="resultCount">0</span> 条匹配记录</h2>
+            <p id="resultSummary" class="result-summary">正在读取数据……</p>
+          </div>
+          <label class="sort-control">排序
+            <select id="sortSelect">
+              <option value="name-asc">校名 A–Z</option>
+              <option value="province-asc">省份 A–Z</option>
+              <option value="coverage-desc">资料完整度优先</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="loadingState" class="state-panel" role="status">
+          <span class="loader" aria-hidden="true"></span>
+          <p>正在加载宿舍资料……</p>
+        </div>
+        <div id="errorState" class="state-panel error-state" hidden>
+          <strong>数据暂时无法加载</strong>
+          <p id="errorMessage">请稍后刷新页面重试。</p>
+          <button id="retryButton" class="primary-button" type="button">重新加载</button>
+        </div>
+        <div id="emptyState" class="state-panel" hidden>
+          <span class="empty-mark" aria-hidden="true">⌕</span>
+          <strong>没有找到完全匹配的记录</strong>
+          <p>试试减少筛选条件，或者换一个更短的关键词。</p>
+          <button id="emptyReset" class="secondary-button" type="button">清除筛选</button>
+        </div>
+
+        <div id="resultGrid" class="result-grid" aria-live="polite"></div>
+        <nav id="pagination" class="pagination" aria-label="结果分页" hidden>
+          <button id="prevPage" class="page-button" type="button">← 上一页</button>
+          <span id="pageInfo">第 1 / 1 页</span>
+          <button id="nextPage" class="page-button" type="button">下一页 →</button>
+        </nav>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <strong>全国高校宿舍查询 · 内测版</strong>
+      <p>数据整理与原始网页：Peter Shelby。优化页面保留原数据，仅改善检索与阅读体验。</p>
     </div>
-    <div class="filter-group">
-      <label>🛏️ 几人间</label>
-      <select id="filterRoom">
-        <option value="">不限</option>
-        <option value="1">1人间</option><option value="2">2人间</option>
-        <option value="3">3人间</option><option value="4">4人间</option>
-        <option value="5">5人间</option><option value="6">6人间</option>
-        <option value="7">7人间</option><option value="8">8人间</option>
-      </select>
+    <div class="footer-links">
+      <a href="https://github.com/petershe1by/University-dormitory-situation" target="_blank" rel="noopener noreferrer">原始项目</a>
+      <a href="https://github.com/petershe1by/University-dormitory-situation_1.0.1" target="_blank" rel="noopener noreferrer">内测仓库</a>
     </div>
-    <div class="filter-group">
-      <label>🔌 夜间断电</label>
-      <select id="filterPower">
-        <option value="">不限</option>
-        <option value="不断电">不断电</option>
-        <option value="断电">断电/分季节断电</option>
-      </select>
+  </footer>
+
+  <dialog id="detailDialog" class="detail-dialog" aria-labelledby="detailTitle">
+    <div class="dialog-header">
+      <div>
+        <p id="detailMeta" class="section-kicker"></p>
+        <h2 id="detailTitle"></h2>
+      </div>
+      <button id="dialogClose" class="dialog-close" type="button" aria-label="关闭详情">×</button>
     </div>
-    <div class="filter-group">
-      <label>🚿 洗澡热水</label>
-      <select id="filterShower">
-        <option value="">不限</option>
-        <option value="全天">全天供应</option>
-        <option value="分时段">分时段供应</option>
-        <option value="定时">定时供应</option>
-      </select>
+    <div id="detailContent" class="dialog-content"></div>
+  </dialog>
+
+  <dialog id="methodDialog" class="method-dialog" aria-labelledby="methodTitle">
+    <div class="dialog-header">
+      <div>
+        <p class="section-kicker">DATA NOTES</p>
+        <h2 id="methodTitle">如何理解这些数据</h2>
+      </div>
+      <button id="methodClose" class="dialog-close" type="button" aria-label="关闭数据说明">×</button>
     </div>
-    <button class="clear-btn" id="clearBtn">↺ 清除所有筛选</button>
-  </div>
-  <div class="stats-bar">
-    <span>共 <span class="count" id="resultCount">0</span> 所高校</span>
-    <span style="font-size:12px; color:#999;">点击行查看详细信息</span>
-  </div>
-  <div class="pagination" id="pagination"></div>
-  <div class="table-wrap">
-    <div id="loadingIndicator" class="loading">
-      <div class="spinner"></div>
-      <div>正在加载数据...</div>
+    <div class="method-content">
+      <p>本页整理自全国大学生的公开分享。宿舍条件会因校区、楼栋、年级、培养层次和改造年份而变化。</p>
+      <ul>
+        <li><strong>“有 / 无”不是官方承诺：</strong>请以录取年份学校发布的住宿安排为准。</li>
+        <li><strong>“部分有”会纳入“有”筛选：</strong>打开详情可查看原始文字。</li>
+        <li><strong>条件供电单独分类：</strong>冬夏季、周末或不同校区安排不同，不再简单归入“不断电”。</li>
+        <li><strong>记录数不等于学校数：</strong>重名记录可能来自不同批次或信息完整度不同。</li>
+      </ul>
+      <p class="method-callout">如果你发现信息过时，请在内测仓库提交 issue，并尽量附上校区、楼栋、时间和公开来源。</p>
     </div>
-    <table id="resultTable" style="display:none;">
-      <thead>
-        <tr>
-          <th data-sort="省份">省份 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="院校名称" class="sorted">院校名称 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="城市">城市 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="几人间">几人间 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="上床下桌">上床下桌 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="宿舍空调">空调 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="独立卫浴">独立卫浴 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="洗澡热水时段">洗澡热水 <span class="sort-icon">▲▼</span></th>
-          <th data-sort="夜间断电">夜间断电 <span class="sort-icon">▲▼</span></th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-</div>
-<div class="footer">
-  <div>数据整理 · 网页制作：<strong>Peter Shelby</strong></div>
-  <div style="font-size:12px;">鸣谢广大数据提供者 ❤️ 本系统数据来源于全国大学生公开分享，仅供参考</div>
-  <div style="margin-top:8px; font-size:12px;">
-    <a href="https://github.com/petershe1by" target="_blank">GitHub: petershe1by</a>
-    &nbsp;·&nbsp;
-    <a href="https://github.com/petershe1by/University-dormitory-situation/issues" target="_blank">反馈问题 / 提供数据</a>
-  </div>
-</div>
-<script>
-let allData = [];
-let currentData = [];
-let expandedRow = null;
-let sortKey = '院校名称';
-let sortAsc = true;
-let currentPage = 1;
-const PAGE_SIZE = 50;
+  </dialog>
 
-function init() {
-  fetch('dorm_data.json')
-    .then(r => r.json())
-    .then(d => {
-      allData = d;
-      document.getElementById('loadingIndicator').style.display = 'none';
-      document.getElementById('resultTable').style.display = '';
-      populateProvinces();
-      renderTable();
-      bindEvents();
-    })
-    .catch(e => {
-      document.getElementById('loadingIndicator').innerHTML = '<div style="color:#c62828;">数据加载失败: ' + e.message + '</div>';
-    });
-}
-
-function populateProvinces() {
-  const p = [...new Set(allData.map(d => d['省份']).filter(Boolean))].sort();
-  const sel = document.getElementById('filterProvince');
-  p.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o); });
-}
-
-function getFilteredData() {
-  const nameQ = document.getElementById('filterName').value.trim().toLowerCase();
-  const provinceQ = document.getElementById('filterProvince').value;
-  const roomQ = document.getElementById('filterRoom').value;
-  const powerQ = document.getElementById('filterPower').value;
-  const showerQ = document.getElementById('filterShower').value;
-  return allData.filter(d => {
-    if (nameQ && !(d['院校名称']||'').toLowerCase().includes(nameQ)) return false;
-    if (provinceQ && d['省份'] !== provinceQ) return false;
-    if (roomQ) { const r = (d['几人间']||''); if (!r.includes(roomQ)) return false; }
-    if (powerQ) { const p = (d['夜间断电']||'');
-      if (powerQ === '不断电' && !p.includes('不断电')) return false;
-      if (powerQ === '断电' && (p.includes('不断电')||!p.includes('断电'))) return false; }
-    if (showerQ) { const s = (d['洗澡热水时段']||'');
-      if (showerQ === '全天' && !s.includes('全天')) return false;
-      if (showerQ === '分时段' && !s.includes('分时段')) return false; }
-    return true;
-  });
-}
-
-function formatBadge(v,c){ if(!v||v==='无'||v==='None') return '<span class="badge badge-none">-</span>'; return '<span class="badge '+c+'">'+esc(v)+'</span>'; }
-function highlightText(t,q){ if(!q||!t) return t||'-'; const r=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'); return String(t).replace(r,'<span class="highlight">$1</span>'); }
-function esc(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-function renderTable() {
-  let filtered = getFilteredData();
-  filtered.sort((a,b)=>{ const va=(a[sortKey]||'').toString(); const vb=(b[sortKey]||'').toString(); return sortAsc?va.localeCompare(vb,'zh-CN'):vb.localeCompare(va,'zh-CN'); });
-  currentData = filtered;
-  const totalPages = Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
-  if (currentPage>totalPages) currentPage = totalPages;
-  const start = (currentPage-1)*PAGE_SIZE;
-  const pageData = filtered.slice(start,start+PAGE_SIZE);
-  const tbody = document.getElementById('tableBody');
-  const nameQ = document.getElementById('filterName').value.trim();
-  document.getElementById('resultCount').textContent = filtered.length;
-  tbody.innerHTML = '';
-  if (filtered.length===0) { tbody.innerHTML = '<tr><td colspan="9"><div class="no-result"><span class="emoji">🔍</span>没有找到匹配的大学</div></td></tr>'; renderPagination(0); return; }
-  const frag = document.createDocumentFragment();
-  pageData.forEach((d,i)=>{
-    const gi = start+i;
-    const tr = document.createElement('tr'); tr.dataset.index = gi; tr.addEventListener('click',()=>toggleDetail(gi));
-    tr.innerHTML = '<td>'+(d['省份']?'<span class="badge badge-province">'+esc(d['省份'])+'</span>':'-')+'</td><td><strong>'+highlightText(d['院校名称']||'-',nameQ)+'</strong></td><td>'+(d['城市']||'-')+'</td><td>'+(d['几人间']||'-')+'</td><td>'+formatBadge(d['上床下桌'],d['上床下桌']==='是'?'badge-on':d['上床下桌']==='部分'?'badge-partial':'badge-off')+'</td><td>'+formatBadge(d['宿舍空调'],'badge-on')+'</td><td>'+formatBadge(d['独立卫浴'],d['独立卫浴']==='部分有'?'badge-partial':'badge-on')+'</td><td>'+formatBadge(d['洗澡热水时段'],'badge-partial')+'</td><td>'+formatBadge(d['夜间断电'],d['夜间断电']==='不断电'?'badge-on':'badge-off')+'</td>';
-    frag.appendChild(tr);
-    const dt = document.createElement('tr'); dt.className='detail-row'; dt.id='detail-'+gi;
-    const dc = document.createElement('td'); dc.colSpan=9; dc.className='detail-cell';
-    const fields = [['⭐存在多校区','⭐存在多校区'],['院校地址','院校地址'],['层次','层次'],['性质','性质'],['上床下桌','上床下桌'],['几人间','几人间'],['宿舍空调','宿舍空调'],['教室空调','教室空调'],['独立卫浴','独立卫浴'],['洗澡热水时段','洗澡热水时段'],['洗衣机','洗衣机'],['通宵自习室','通宵自习室'],['宿舍限电瓦数','宿舍限电瓦数'],['夜间断电','夜间断电'],['夜间断网','夜间断网'],['校园网速度','校园网速度'],['校园网价格','校园网价格'],['大一带电脑','大一带电脑'],['查寝情况','查寝情况'],['晚归门禁时间','晚归门禁时间'],['早晚自习','早晚自习'],['晨跑要求','晨跑要求'],['跑步打卡要求','跑步打卡要求'],['地铁','地铁'],['⭐市区距离','⭐市区距离'],['学校交通便利','学校交通便利'],['点外卖','点外卖'],['食堂价格感受','食堂价格感受'],['超市价格感受','超市价格感受'],['收发快递','收发快递'],['共享单车','共享单车']];
-    let hd=false; let dh='<div class="detail-grid">';
-    for(let f of fields){ const val=d[f[1]]; if(val&&val!=='None'){ dh+='<div class="detail-item"><span class="label">'+f[0]+'</span><span class="value">'+esc(val)+'</span></div>'; hd=true; } }
-    dc.innerHTML = hd ? dh+'</div>' : '<div style="color:#999;padding:8px 0;">暂无详细数据</div>';
-    dt.appendChild(dc); frag.appendChild(dt);
-  });
-  tbody.appendChild(frag);
-  renderPagination(filtered.length);
-}
-
-function renderPagination(total) {
-  const tp = Math.ceil(total/PAGE_SIZE)||1;
-  const el = document.getElementById('pagination');
-  if(total<=PAGE_SIZE){el.innerHTML='';return;}
-  let h='<button onclick="goPage(1)"'+(currentPage<=1?'disabled':'')+'>«</button><button onclick="goPage('+(currentPage-1)+')" '+(currentPage<=1?'disabled':'')+'>‹</button>';
-  h+='<span class="page-info">'+currentPage+'/'+tp+'</span><button onclick="goPage('+(currentPage+1)+')" '+(currentPage>=tp?'disabled':'')+'>›</button><button onclick="goPage('+tp+')" '+(currentPage>=tp?'disabled':'')+'>»</button>';
-  el.innerHTML=h;
-}
-function goPage(p){currentPage=p;expandedRow=null;renderTable();document.getElementById('resultTable').scrollIntoView({behavior:'smooth',block:'start'});}
-
-function toggleDetail(idx) {
-  const el = document.getElementById('detail-'+idx);
-  if(!el) return;
-  const vis = el.classList.contains('visible');
-  document.querySelectorAll('.detail-row.visible').forEach(r=>r.classList.remove('visible'));
-  if(!vis){el.classList.add('visible');expandedRow=currentData[idx];setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'center'}),100);}
-  else expandedRow=null;
-}
-
-function bindEvents() {
-  let dt = null;
-  ['filterName','filterProvince','filterRoom','filterPower','filterShower'].forEach(id=>{
-    document.getElementById(id).addEventListener('change',()=>{expandedRow=null;currentPage=1;renderTable();});
-    if(id==='filterName') document.getElementById(id).addEventListener('input',()=>{expandedRow=null;currentPage=1;clearTimeout(dt);dt=setTimeout(renderTable,200);});
-  });
-  document.getElementById('clearBtn').addEventListener('click',()=>{['filterName','filterProvince','filterRoom','filterPower','filterShower'].forEach(id=>document.getElementById(id).value='');expandedRow=null;currentPage=1;renderTable();});
-  document.querySelectorAll('thead th[data-sort]').forEach(th=>{th.addEventListener('click',()=>{const k=th.dataset.sort;if(sortKey===k)sortAsc=!sortAsc;else{sortKey=k;sortAsc=true;}document.querySelectorAll('thead th').forEach(h=>h.classList.remove('sorted'));th.classList.add('sorted');expandedRow=null;currentPage=1;renderTable();});});
-}
-document.addEventListener('DOMContentLoaded',init);
-</script>
+  <script type="module" src="app.mjs"></script>
 </body>
 </html>

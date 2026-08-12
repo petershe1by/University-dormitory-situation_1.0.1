@@ -1,0 +1,14 @@
+{
+  "name": "university-dormitory-situation-internal-test",
+  "version": "2.0.0-beta.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate:data": "node scripts/validate-data.mjs",
+    "check": "npm run test && npm run validate:data"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
